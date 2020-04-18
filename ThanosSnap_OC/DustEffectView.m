@@ -77,19 +77,23 @@
                 [movePath moveToPoint:layer.position];
                 [movePath addQuadCurveToPoint:realEndPoint controlPoint:controlPoint];
                 
+                #if 1
                 CAKeyframeAnimation *moveAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
                 moveAnimation.path = movePath.CGPath;
                 moveAnimation.calculationMode = kCAAnimationPaced;
+                #endif
+                
                 
                 CABasicAnimation *rotateAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
                 rotateAnimation.toValue = @(radian1 + radian2);
                 
+                #if 1
                 CABasicAnimation *fadeOutAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
                 fadeOutAnimation.toValue = @(0.0);
-                
+                #endif
                 CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
                 animationGroup.animations = @[moveAnimation, rotateAnimation, fadeOutAnimation];
-                animationGroup.duration = 1.0;
+                animationGroup.duration = 10.0;
                 animationGroup.beginTime = CACurrentMediaTime() + 1.35 * i / imagesCount;
                 animationGroup.removedOnCompletion = NO;
                 animationGroup.fillMode = kCAFillModeForwards;
@@ -186,9 +190,12 @@
                     // (UInt32 *currentPixelPoint = pixelBuffer + offset)
                     // 然后 *currentPixelPoint 取到 ARGB 的值
                     UInt32 currentPixel = pixelBuffer[offset];
+                    /*
                     CGFloat random = (arc4random() * 1.0) / UINT32_MAX;
                     CGFloat temp = random + 2 * (column * 1.0 / width);
                     NSInteger index = floor(imagesCount * (temp / 3));
+                     */
+                    NSInteger index = [self randomIntegerForLow:0 hight:imagesCount];
                     UInt32 *tmp = framePixels[index];
                     tmp[offset] = currentPixel;
                 }
@@ -230,5 +237,9 @@
     return lowResult;
 }
 
+- (NSInteger)randomIntegerForLow:(NSInteger)low hight:(NSInteger)hight {
+    NSInteger difference = hight - low;
+    return low + arc4random() % difference;
+}
 
 @end
