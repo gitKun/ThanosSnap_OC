@@ -93,7 +93,7 @@
                 #endif
                 CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
                 animationGroup.animations = @[moveAnimation, rotateAnimation, fadeOutAnimation];
-                animationGroup.duration = 10.0;
+                animationGroup.duration = 2.0;
                 animationGroup.beginTime = CACurrentMediaTime() + 1.35 * i / imagesCount;
                 animationGroup.removedOnCompletion = NO;
                 animationGroup.fillMode = kCAFillModeForwards;
@@ -190,12 +190,11 @@
                     // (UInt32 *currentPixelPoint = pixelBuffer + offset)
                     // 然后 *currentPixelPoint 取到 ARGB 的值
                     UInt32 currentPixel = pixelBuffer[offset];
-                    /*
-                    CGFloat random = (arc4random() * 1.0) / UINT32_MAX;
+                    //CGFloat random = (arc4random() * 1.0) / UINT32_MAX;
+                    CGFloat random = [self randomFloatForLow:0 hight:1];
                     CGFloat temp = random + 2 * (column * 1.0 / width);
+                    printf("%.2f \n", temp);
                     NSInteger index = floor(imagesCount * (temp / 3));
-                     */
-                    NSInteger index = [self randomIntegerForLow:0 hight:imagesCount];
                     UInt32 *tmp = framePixels[index];
                     tmp[offset] = currentPixel;
                 }
@@ -232,7 +231,7 @@
 #pragma mark === tools
 
 - (CGFloat)randomFloatForLow:(CGFloat)low hight:(CGFloat)hight {
-    CGFloat random = (arc4random() * 1.0) / UINT32_MAX;
+    CGFloat random = (arc4random() % 100) / 100.0;
     CGFloat lowResult = low + (hight - low) * random;
     return lowResult;
 }
